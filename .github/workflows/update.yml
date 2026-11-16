@@ -66,10 +66,12 @@ jobs:
           git add data
           if git diff --cached --quiet; then
             echo "数据无变化，跳过提交"
-          else
-            git commit -m "chore(data): 同步 $(date +'%Y-%m-%d') 《求是》最新期次 [skip ci]"
-            git push origin HEAD:"${GITHUB_REF_NAME}"
+            exit 0
           fi
+          git commit -m "chore(data): 同步 $(date +'%Y-%m-%d') 《求是》最新期次 [skip ci]"
+          # 期间若有人手动推送过，先变基再推，避免非快进被拒
+          git pull --rebase --autostash origin "${GITHUB_REF_NAME}"
+          git push origin HEAD:"${GITHUB_REF_NAME}"
 
       - name: 上传 Pages 产物
         uses: actions/upload-pages-artifact@v3
