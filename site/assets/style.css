@@ -24,8 +24,8 @@
   --blue-soft: #eef2f8;
   --radius: 10px;
   --shadow: 0 1px 2px rgba(26, 23, 20, .04), 0 8px 24px -12px rgba(26, 23, 20, .12);
-  --sans: "PingFang SC", "HarmonyOS Sans SC", "Microsoft YaHei", "Source Han Sans SC", system-ui, sans-serif;
-  --serif: "Songti SC", "SimSun", "Noto Serif CJK SC", "Source Han Serif SC", "STSong", serif;
+  --sans: "PingFang SC", "HarmonyOS Sans SC", "Microsoft YaHei", "Source Han Sans SC", "Noto Sans CJK SC", system-ui, sans-serif;
+  --serif: "Songti SC", "SimSun", "Source Han Serif SC", "Noto Serif CJK SC", "STSong", serif;
 }
 
 * { box-sizing: border-box; }
