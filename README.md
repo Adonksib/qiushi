@@ -39,26 +39,28 @@ python scripts/build_pdf.py --dist dist --issue 22
 
 ## 二、部署到 GitHub Pages
 
-### 1. 建仓库并推送
+**当前状态：已部署完成。**
+
+- 仓库：<https://github.com/Adonksib/qiushi>
+- 站点：<https://adonksib.github.io/qiushi/>
+- Pages 源已设为 **GitHub Actions**，每次推送到 `main` 自动重建并发布
+
+日常更新只需要：
 
 ```bash
-git init
-git add .
-git commit -m "feat: 求是考点站初版"
-git branch -M main
-git remote add origin https://github.com/<你的用户名>/qiushi-exam.git
-git push -u origin main
+git add -A && git commit -m "更新" && git push
 ```
 
-### 2. 打开 Pages
+### 换一台机器或重新搭建时
 
-仓库 → **Settings → Pages → Build and deployment → Source** 选择 **GitHub Actions**。
-
-推送后 `.github/workflows/update.yml` 会自动跑一次，完成后站点地址是：
-
+```bash
+git clone https://github.com/Adonksib/qiushi.git
+cd qiushi
+pip install -r requirements.txt
+python scripts/build_site.py --out dist   # 本地预览
 ```
-https://<你的用户名>.github.io/qiushi-exam/
-```
+
+仓库 → **Settings → Pages → Build and deployment → Source** 选择 **GitHub Actions**，之后每次推送会自动部署。
 
 ### 3. （可选）开启自动提炼
 
