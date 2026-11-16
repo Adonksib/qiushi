@@ -44,6 +44,34 @@ jobs:
           sudo apt-get install -y -qq fonts-noto-cjk || true
           pip install -r requirements.txt
 
+      - name: 自检 · 模型连通性（未配置 LLM_API_KEY 则跳过）
+        if: env.LLM_API_KEY != ''
+        continue-on-error: true
+        run: |
+          python - <<'PY'
+          import os, requests
+          base = os.environ.get("LLM_BASE_URL", "https://api.deepseek.com").rstrip("/")
+          url = base + "/chat/completions" if base.endswith("/v1") else base + "/v1/chat/completions"
+          print("请求地址:", url, "| 模型:", os.environ.get("LLM_MODEL", "deepseek-chat"))
+          try:
+              r = requests.post(
+                  url,
+                  timeout=60,
+                  headers={"Authorization": "Bearer " + os.environ["LLM_API_KEY"]},
+                  json={"model": os.environ.get("LLM_MODEL", "deepseek-chat"),
+                        "messages": [{"role": "user", "content": "只回复两个字：正常"}],
+                        "max_tokens": 12},
+              )
+              print("HTTP", r.status_code, r.text[:300])
+              if r.status_code != 200:
+                  raise SystemExit("❌ 自检未通过：检查 LLM_API_KEY / LLM_BASE_URL / LLM_MODEL")
+              print("✅ 自检通过：新一期会自动生成要点提炼")
+          except SystemExit:
+              raise
+          except Exception as e:
+              raise SystemExit("❌ 自检未通过：%s" % e)
+          PY
+
       - name: 抓取最新期次（增量）
         run: python scripts/scrape.py
 
